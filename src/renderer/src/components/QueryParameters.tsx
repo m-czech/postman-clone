@@ -1,4 +1,3 @@
-import Typography from "@mui/joy/Typography";
 import Input from "@mui/joy/Input";
 import Table from "@mui/joy/Table";
 import Checkbox from "@mui/joy/Checkbox";
