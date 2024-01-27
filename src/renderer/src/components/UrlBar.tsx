@@ -17,7 +17,7 @@ export default function UrlBar() {
                 }}
             >
                 <Dropdown>
-                    <MenuButton variant='soft'>select method</MenuButton>
+                    <MenuButton variant='soft'>method</MenuButton>
                     <Menu >
                         <MenuItem>GET</MenuItem>
                         <MenuItem>POST</MenuItem>
@@ -27,6 +27,7 @@ export default function UrlBar() {
                 <Input
                     variant="soft"
                     placeholder="Enter URL"
+                    fullWidth
                 >
                 </Input>
             </Box>
