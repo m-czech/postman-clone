@@ -4,6 +4,7 @@ import Tab from "@mui/joy/Tab";
 import TabList from "@mui/joy/TabList";
 import Tabs from "@mui/joy/Tabs";
 import QueryParameters from "./QueryParameters";
+import AuthorizationTab from "./AuthorizationTab";
 
 export default function RequestMenu() {
     return (
@@ -20,7 +21,7 @@ export default function RequestMenu() {
                     <QueryParameters />
                 </TabPanel>
                 <TabPanel value={1}>
-
+                    <AuthorizationTab />
                 </TabPanel>
                 <TabPanel value={2}>
 
