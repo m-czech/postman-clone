@@ -2,7 +2,7 @@ import Input from "@mui/joy/Input";
 import Table from "@mui/joy/Table";
 import Checkbox from "@mui/joy/Checkbox";
 
-export default function QueryParameters() {
+export default function DataTable() {
     return (
         <Table borderAxis="both">
             <thead>

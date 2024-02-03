@@ -3,7 +3,7 @@ import Box from "@mui/joy/Box";
 import Tab from "@mui/joy/Tab";
 import TabList from "@mui/joy/TabList";
 import Tabs from "@mui/joy/Tabs";
-import QueryParameters from "./QueryParameters";
+import DataTable from "./DataTable";
 import AuthorizationTab from "./AuthorizationTab";
 
 export default function RequestMenu() {
@@ -18,13 +18,13 @@ export default function RequestMenu() {
                     <Tab>Settings</Tab>
                 </TabList>
                 <TabPanel value={0}>
-                    <QueryParameters />
+                    <DataTable />
                 </TabPanel>
                 <TabPanel value={1}>
                     <AuthorizationTab />
                 </TabPanel>
                 <TabPanel value={2}>
-
+                    <DataTable />
                 </TabPanel>
                 <TabPanel value={3}>
 
