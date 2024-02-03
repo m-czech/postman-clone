@@ -4,21 +4,22 @@ export default function AuthorizationMethodMenu() {
     return (
         <div style={{
             display: 'flex',
-            width: '100%'
+            alignItems: 'center',
+            justifyContent: 'space-between'
         }}>
-    <Typography sx={{
-        flexBasis: '100%'
-    }}>Type</Typography>
+            <Typography>Type</Typography>
 
-    <Dropdown >
-        <MenuButton sx={{
-            width: 0.5
-        }}>No Auth</MenuButton>
-        <Menu >
-            <MenuItem>No auth</MenuItem>
-            <MenuItem>Basic Auth</MenuItem>
-        </Menu>
-    </Dropdown>
-            </div>
-        )
+            <Box sx={{
+                padding: 2
+            }}>
+                <Dropdown >
+                    <MenuButton>No Auth</MenuButton>
+                    <Menu >
+                        <MenuItem>No auth</MenuItem>
+                        <MenuItem>Basic Auth</MenuItem>
+                    </Menu>
+                </Dropdown>
+            </Box>
+        </div>
+    )
 }
