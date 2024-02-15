@@ -1,0 +1,16 @@
+.editorRow {
+    padding: 5px;
+}
+
+.rowInput {
+}
+
+.rowNumberColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.textColumn {
+    display: flex;
+    flex-direction: column;
+}

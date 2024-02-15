@@ -5,6 +5,7 @@ import TabList from "@mui/joy/TabList";
 import Tabs from "@mui/joy/Tabs";
 import DataTable from "./DataTable";
 import AuthorizationTab from "./AuthorizationTab";
+import BodyTab from "./BodyTab";
 
 export default function RequestMenu() {
     return (
@@ -27,7 +28,7 @@ export default function RequestMenu() {
                     <DataTable />
                 </TabPanel>
                 <TabPanel value={3}>
-
+                    <BodyTab />
                 </TabPanel>
                 <TabPanel value={4}>
 
