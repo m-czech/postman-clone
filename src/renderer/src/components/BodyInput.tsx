@@ -64,10 +64,30 @@ export default function BodyInput() {
         setRows(updatedRows)
     }
 
-
     function focusRow(row: Row) {
         let rowToFocus = document.querySelector(`[row-number="${row.number}"]`) as HTMLElement;
         rowToFocus.focus()
+    }
+
+    async function pasteFromClipboard() {
+        let clipboardData = await navigator.clipboard.readText()
+        let newRows: Array<Row> = []
+        let newRowId = lastRowId
+        let newRowNumber = focusedRowRef.current.number
+        clipboardData.split('\n').forEach(chunk => {
+            newRows.push({ id: ++newRowId, number: newRowNumber++, text: chunk })
+        })
+        
+        let insertionIndex = rows.findLastIndex(r => r.number === focusedRowRef.current.number)
+        let rowsBeforeNewRowsInsertion = rows.slice(0, insertionIndex)
+        let rowsAfterNewRowsInsertion = rows.slice(insertionIndex + 1)
+        let result = [...rowsBeforeNewRowsInsertion, ...newRows, ...rowsAfterNewRowsInsertion]
+        
+        result.forEach((r, index) => r.number = ++index)
+        
+        focusedRowRef.current = newRows[0]
+        setLastRowId(newRowId)
+        setRows(result)
     }
 
     return (
@@ -99,7 +119,8 @@ export default function BodyInput() {
                             defaultValue={row.text}
                             onChange={(event) => row.text = event.target.value}
                             onKeyDown={(event) => onKeyDown(event, row)}
-                            onMouseUp={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current)}}>
+                            onMouseUp={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current)}}
+                            onPaste={(event) => { event.preventDefault(); pasteFromClipboard() }}>
                         </input>)
                 }
             </div>
