@@ -20,6 +20,13 @@ export default function BodyInput() {
             case "Backspace":
                 if (row.text == '' && row.number !== 1)
                     removeRow(row)
+                break
+            case "ArrowUp":
+                moveFocus(row, event.key)
+                break
+            case "ArrowDown":
+                moveFocus(row, event.key)
+                break
         }
     }
 
@@ -35,6 +42,17 @@ export default function BodyInput() {
                 setRows([...rows, newRow])
                 focusedRowRef.current = newRow
             }
+    }
+
+    function moveFocus(row: Row, pressedArrow: string) {
+        let rowToFocus
+        if (pressedArrow === "ArrowUp")
+            rowToFocus = rows.findLast(r => r.number === row.number - 1)
+        else if (pressedArrow === "ArrowDown")
+            rowToFocus = rows.findLast(r => r.number === row.number + 1)
+        
+        if (rowToFocus)
+            focusRow(rowToFocus)
     }
 
     function removeRow(row: Row) {
