@@ -1,34 +1,55 @@
 import { KeyboardEvent, useRef, useState } from "react"
 
 type Row = {
+    id: number
     number: number
     text: string
 }
 
 export default function BodyInput() {
-    const [rows, setRows] = useState([{ number: 1, text: '' }] as Array<Row>)
+    const [lastRowId, setLastRowId] = useState(0)
+    const [rows, setRows] = useState<Array<Row>>([{ id: lastRowId, number: 1, text: '' }])
     const focusedRowRef = useRef(rows[0])
 
-
-    function onEnterKeydown(event: KeyboardEvent) {
-        if (event.key == 'Enter') {
-            event.preventDefault()
-
-            let nextFocusedRow = rows.find(row => row.number == focusedRowRef.current.number + 1)
-            if (nextFocusedRow)
-                focusedRowRef.current = nextFocusedRow
-            else {
-                let newRow = { number: rows.length + 1, text: '' }
-                setRows([...rows, newRow])
-                focusedRowRef.current = newRow
-            }
-            focusRow(focusedRowRef.current)
+    function onKeyDown(event: KeyboardEvent, row: Row) {
+        switch(event.key) {
+            case "Enter":
+                event.preventDefault()
+                onEnterKeydown()
+                break
+            case "Backspace":
+                if (row.text == '' && row.number !== 1)
+                    removeRow(row)
         }
     }
 
+    function onEnterKeydown() {
+        let nextFocusedRow = rows.find(row => row.number == focusedRowRef.current.number + 1)
+            if (nextFocusedRow) {
+                focusedRowRef.current = nextFocusedRow
+                focusRow(focusedRowRef.current)
+            }
+            else {
+                let newRow = { id: lastRowId + 1,  number: rows.length + 1, text: '' }
+                setLastRowId(lastRowId + 1)
+                setRows([...rows, newRow])
+                focusedRowRef.current = newRow
+            }
+    }
+
+    function removeRow(row: Row) {
+        let updatedRows = rows.filter(r => r.number !== row.number)
+        updatedRows.forEach(r => {
+            if (r.number > row.number)
+                r.number -= 1
+        })
+        setRows(updatedRows)
+    }
+
+
     function focusRow(row: Row) {
         let rowToFocus = document.querySelector(`[row-number="${row.number}"]`) as HTMLElement;
-        rowToFocus?.focus()
+        rowToFocus.focus()
     }
 
     return (
@@ -37,12 +58,11 @@ export default function BodyInput() {
             minHeight: "200px",
             backgroundColor: "grey",
             display: "flex"
-        }}
-            onKeyDown={onEnterKeydown}>
+        }}>
             <div className="rowNumberColumn">
                 {
                     rows.map(row =>
-                        <div key={row.number}
+                        <div key={row.id}
                             className="editorRow">
                             {row.number}
                         </div>)
@@ -53,13 +73,15 @@ export default function BodyInput() {
                 {
                     rows.map(row =>
                         <input
+                            key={row.id}
                             type="text"
-                            key={row.number}
                             row-number={row.number.toString()}
                             className="editorRow rowInput"
                             autoFocus={row.number == focusedRowRef.current.number}
                             defaultValue={row.text}
-                            onMouseDown={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current)}}>
+                            onChange={(event) => row.text = event.target.value}
+                            onKeyDown={(event) => onKeyDown(event, row)}
+                            onMouseUp={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current)}}>
                         </input>)
                 }
             </div>
