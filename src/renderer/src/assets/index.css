@@ -1,16 +1,19 @@
-.editorRow {
-    padding: 5px;
-}
-
 .rowInput {
+    border: 0;
+    font-size: medium;
 }
 
-.rowNumberColumn {
+.editor-row {
     display: flex;
-    flex-direction: column;
+}
+
+.editor-row-number {
+    min-width: 2%;
+    padding-left: 10px;
 }
 
 .textColumn {
     display: flex;
     flex-direction: column;
+    flex-basis: 100%;
 }

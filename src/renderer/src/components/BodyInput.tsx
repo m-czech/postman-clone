@@ -12,7 +12,7 @@ export default function BodyInput() {
     const focusedRowRef = useRef(rows[0])
 
     function onKeyDown(event: KeyboardEvent, row: Row) {
-        switch(event.key) {
+        switch (event.key) {
             case "Enter":
                 event.preventDefault()
                 onEnterKeydown()
@@ -32,16 +32,16 @@ export default function BodyInput() {
 
     function onEnterKeydown() {
         let nextFocusedRow = rows.find(row => row.number == focusedRowRef.current.number + 1)
-            if (nextFocusedRow) {
-                focusedRowRef.current = nextFocusedRow
-                focusRow(focusedRowRef.current)
-            }
-            else {
-                let newRow = { id: lastRowId + 1,  number: rows.length + 1, text: '' }
-                setLastRowId(lastRowId + 1)
-                setRows([...rows, newRow])
-                focusedRowRef.current = newRow
-            }
+        if (nextFocusedRow) {
+            focusedRowRef.current = nextFocusedRow
+            focusRow(focusedRowRef.current)
+        }
+        else {
+            let newRow = { id: lastRowId + 1, number: rows.length + 1, text: '' }
+            setLastRowId(lastRowId + 1)
+            setRows([...rows, newRow])
+            focusedRowRef.current = newRow
+        }
     }
 
     function moveFocus(row: Row, pressedArrow: string) {
@@ -50,7 +50,7 @@ export default function BodyInput() {
             rowToFocus = rows.findLast(r => r.number === row.number - 1)
         else if (pressedArrow === "ArrowDown")
             rowToFocus = rows.findLast(r => r.number === row.number + 1)
-        
+
         if (rowToFocus)
             focusRow(rowToFocus)
     }
@@ -77,14 +77,14 @@ export default function BodyInput() {
         clipboardData.split('\n').forEach(chunk => {
             newRows.push({ id: ++newRowId, number: newRowNumber++, text: chunk })
         })
-        
+
         let insertionIndex = rows.findLastIndex(r => r.number === focusedRowRef.current.number)
         let rowsBeforeNewRowsInsertion = rows.slice(0, insertionIndex)
         let rowsAfterNewRowsInsertion = rows.slice(insertionIndex + 1)
         let result = [...rowsBeforeNewRowsInsertion, ...newRows, ...rowsAfterNewRowsInsertion]
-        
+
         result.forEach((r, index) => r.number = ++index)
-        
+
         focusedRowRef.current = newRows[0]
         setLastRowId(newRowId)
         setRows(result)
@@ -95,35 +95,29 @@ export default function BodyInput() {
             width: "100%",
             minHeight: "200px",
             backgroundColor: "grey",
-            display: "flex"
         }}>
-            <div className="rowNumberColumn">
-                {
-                    rows.map(row =>
-                        <div key={row.id}
-                            className="editorRow">
-                            {row.number}
-                        </div>)
-                }
-            </div>
-
-            <div className="textColumn">
-                {
-                    rows.map(row =>
-                        <input
-                            key={row.id}
-                            type="text"
-                            row-number={row.number.toString()}
-                            className="editorRow rowInput"
-                            autoFocus={row.number == focusedRowRef.current.number}
-                            defaultValue={row.text}
-                            onChange={(event) => row.text = event.target.value}
-                            onKeyDown={(event) => onKeyDown(event, row)}
-                            onMouseUp={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current)}}
-                            onPaste={(event) => { event.preventDefault(); pasteFromClipboard() }}>
-                        </input>)
-                }
-            </div>
+            {
+                rows.map(row => {
+                    return (
+                        <div key={row.id} className="editor-row">
+                            <div className="editor-row-number">
+                                {row.number}
+                            </div>
+                            <input
+                                type="text"
+                                row-number={row.number.toString()}
+                                className="rowInput"
+                                autoFocus={row.number == focusedRowRef.current.number}
+                                defaultValue={row.text}
+                                onChange={(event) => row.text = event.target.value}
+                                onKeyDown={(event) => onKeyDown(event, row)}
+                                onMouseUp={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current) }}
+                                onPaste={(event) => { event.preventDefault(); pasteFromClipboard() }}>
+                            </input>
+                        </div>
+                    )
+                })
+            }
         </div>
     )
 }
