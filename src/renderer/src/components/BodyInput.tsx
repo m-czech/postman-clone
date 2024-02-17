@@ -104,6 +104,10 @@ export default function BodyInput() {
                                 {row.number}
                             </div>
                             <input
+                                style={{
+                                    flexGrow: 1,
+                                    padding: "5px"
+                                }}
                                 type="text"
                                 row-number={row.number.toString()}
                                 className="rowInput"
