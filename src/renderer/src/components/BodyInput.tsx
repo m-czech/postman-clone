@@ -18,14 +18,16 @@ export default function BodyInput() {
                 onEnterKeydown()
                 break
             case "Backspace":
-                if (row.text == '' && row.number !== 1)
+                if (row.text == '' && row.number !== 1) {
                     removeRow(row)
+                    moveFocus(row, MoveFocusDirection.Up)
+                }                    
                 break
             case "ArrowUp":
-                moveFocus(row, event.key)
+                moveFocus(row, MoveFocusDirection.Up)
                 break
             case "ArrowDown":
-                moveFocus(row, event.key)
+                moveFocus(row, MoveFocusDirection.Down)
                 break
         }
     }
@@ -44,11 +46,16 @@ export default function BodyInput() {
         }
     }
 
-    function moveFocus(row: Row, pressedArrow: string) {
+    enum MoveFocusDirection {
+        Up,
+        Down
+    }
+
+    function moveFocus(row: Row, direction: MoveFocusDirection) {
         let rowToFocus
-        if (pressedArrow === "ArrowUp")
+        if (direction === MoveFocusDirection.Up)
             rowToFocus = rows.findLast(r => r.number === row.number - 1)
-        else if (pressedArrow === "ArrowDown")
+        else if (direction === MoveFocusDirection.Down)
             rowToFocus = rows.findLast(r => r.number === row.number + 1)
 
         if (rowToFocus)
