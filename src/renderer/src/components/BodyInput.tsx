@@ -91,11 +91,7 @@ export default function BodyInput() {
     }
 
     return (
-        <div style={{
-            width: "100%",
-            minHeight: "200px",
-            backgroundColor: "grey",
-        }}>
+        <div className="editor-container">
             {
                 rows.map(row => {
                     return (
@@ -104,13 +100,9 @@ export default function BodyInput() {
                                 {row.number}
                             </div>
                             <input
-                                style={{
-                                    flexGrow: 1,
-                                    padding: "5px"
-                                }}
                                 type="text"
                                 row-number={row.number.toString()}
-                                className="rowInput"
+                                className="editor-row-input"
                                 autoFocus={row.number == focusedRowRef.current.number}
                                 defaultValue={row.text}
                                 onChange={(event) => row.text = event.target.value}

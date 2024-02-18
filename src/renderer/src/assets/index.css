@@ -1,6 +1,8 @@
-.rowInput {
+.editor-row-input {
     border: 0;
     font-size: medium;
+    flex-grow: 1;
+    padding: "5px";
 }
 
 .editor-row {
@@ -10,10 +12,10 @@
 .editor-row-number {
     min-width: 2%;
     padding-left: 10px;
+    background-color: grey;
 }
 
-.textColumn {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 100%;
+.editor-container {
+    width: 100%;
+    border: "1px grey solid";
 }
