@@ -1,4 +1,4 @@
-import { KeyboardEvent, MouseEvent, useRef, useState } from "react"
+import { KeyboardEvent, useRef, useState } from "react"
 
 type Row = {
     id: number
@@ -27,7 +27,7 @@ export default function BodyInput() {
                 if (row.text == '' && row.number !== 1) {
                     removeRow(row)
                     moveFocus(row, MoveFocusDirection.Up)
-                }                    
+                }
                 break
             case "ArrowUp":
                 moveFocus(row, MoveFocusDirection.Up)
@@ -124,12 +124,10 @@ export default function BodyInput() {
 
     function addRowToSelectedRows(selectedRow?: HTMLElement) {
         let selectedRowNumber
-        let dupa
         if (selectedRow) {
             selectedRowNumber = selectedRow.getElementsByTagName('input')[0].getAttribute('row-number')!
         }
         else {
-            dupa = 'empty'
             selectedRow = selectedRange!.stop
             selectedRowNumber = selectedRange!.stop.getElementsByTagName('input')[0].getAttribute('row-number')!
         }
@@ -138,8 +136,6 @@ export default function BodyInput() {
         let selectionApi = window.getSelection()!
         if (selectedRowNumber < anchorNumber) {
             selectionApi.setBaseAndExtent(selectedRange!.start, 2, selectedRow, 0)
-            if (dupa == 'empty')
-                console.log('dupa')
         }
         else {
             selectionApi.setBaseAndExtent(selectedRange!.start, 0, selectedRow, 2)
@@ -164,12 +160,12 @@ export default function BodyInput() {
                                 defaultValue={row.text}
                                 onChange={(event) => row.text = event.target.value}
                                 onKeyDown={(event) => onKeyDown(event, row)}
-                                onMouseUp={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current); setTimeout(() => restoreSelectedText(), 0)}}
+                                onMouseUp={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current); setTimeout(() => restoreSelectedText(), 0) }}
                                 onPaste={(event) => { event.preventDefault(); pasteFromClipboard() }}
                                 onMouseOver={(event) => handleSelection(event)}
                                 onMouseDown={(event) => startTextSelection(event.target as HTMLInputElement)}
                                 onDragStart={(event) => event.preventDefault()}
-                                >
+                            >
                             </input>
                         </div>
                     )
