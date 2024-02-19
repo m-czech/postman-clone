@@ -78,7 +78,8 @@ export default function BodyInput() {
     }
 
     function focusRow(row: Row) {
-        let rowToFocus = document.querySelector(`[row-number="${row.number}"]`) as HTMLElement;
+        let rowToFocus = document.querySelector(`[row-number="${row.number}"]`) as HTMLInputElement;
+        setTimeout(() => rowToFocus.selectionStart = rowToFocus.selectionEnd = rowToFocus.value.length, 0)
         rowToFocus.focus()
     }
 
