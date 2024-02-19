@@ -1,4 +1,4 @@
-import { KeyboardEvent, useRef, useState } from "react"
+import { KeyboardEvent, MouseEvent, useRef, useState } from "react"
 
 type Row = {
     id: number
@@ -104,8 +104,6 @@ export default function BodyInput() {
     }
 
     function startTextSelection(startTarget: HTMLInputElement) {
-        let selectionApi = window.getSelection()!
-        selectionApi.setBaseAndExtent(startTarget.parentNode!, 2, startTarget.parentNode!, 0)
         setSelectedRange({ start: startTarget.parentElement!, stop: startTarget.parentElement! })
     }
 
@@ -118,7 +116,9 @@ export default function BodyInput() {
     }
 
     function restoreSelectedText() {
-        addRowToSelectedRows()
+        if (selectedRange?.start != selectedRange?.stop) {
+            addRowToSelectedRows()
+        }
     }
 
     function addRowToSelectedRows(selectedRow?: HTMLElement) {
@@ -163,7 +163,8 @@ export default function BodyInput() {
                                 onPaste={(event) => { event.preventDefault(); pasteFromClipboard() }}
                                 onMouseOver={(event) => handleSelection(event)}
                                 onMouseDown={(event) => startTextSelection(event.target as HTMLInputElement)}
-                                onDragStart={(event) => event.preventDefault()}>
+                                onDragStart={(event) => event.preventDefault()}
+                                >
                             </input>
                         </div>
                     )
