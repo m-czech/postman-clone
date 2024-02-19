@@ -13,6 +13,7 @@
     min-width: 2%;
     padding-left: 10px;
     background-color: grey;
+    user-select: none;
 }
 
 .editor-container {

@@ -6,9 +6,15 @@ type Row = {
     text: string
 }
 
+type TextSelectionRange = {
+    start: HTMLElement
+    stop: HTMLElement
+}
+
 export default function BodyInput() {
     const [lastRowId, setLastRowId] = useState(0)
     const [rows, setRows] = useState<Array<Row>>([{ id: lastRowId, number: 1, text: '' }])
+    const [selectedRange, setSelectedRange] = useState<TextSelectionRange>()
     const focusedRowRef = useRef(rows[0])
 
     function onKeyDown(event: KeyboardEvent, row: Row) {
@@ -97,8 +103,47 @@ export default function BodyInput() {
         setRows(result)
     }
 
+    function startTextSelection(startTarget: HTMLInputElement) {
+        let selectionApi = window.getSelection()!
+        selectionApi.setBaseAndExtent(startTarget.parentNode!, 2, startTarget.parentNode!, 0)
+        setSelectedRange({ start: startTarget.parentElement!, stop: startTarget.parentElement! })
+    }
+
+    function handleSelection(event: React.MouseEvent) {
+        if (event.buttons == 1) {
+            let selectedRow = (event.target as HTMLElement).parentElement
+            addRowToSelectedRows(selectedRow!)
+            setSelectedRange({ start: selectedRange!.start, stop: selectedRow! })
+        }
+    }
+
+    function restoreSelectedText() {
+        addRowToSelectedRows()
+    }
+
+    function addRowToSelectedRows(selectedRow?: HTMLElement) {
+        let selectedRowNumber
+        if (selectedRow) {
+            selectedRowNumber = selectedRow.getElementsByTagName('input')[0].getAttribute('row-number')!
+        }
+        else {
+            selectedRow = selectedRange!.stop
+            selectedRowNumber = selectedRange!.stop.getElementsByTagName('input')[0].getAttribute('row-number')!
+        }
+
+        let anchorNumber = selectedRange!.start.getElementsByTagName('input')[0].getAttribute('row-number')!
+        let selectionApi = window.getSelection()!
+        if (selectedRowNumber < anchorNumber) {
+            selectionApi.setBaseAndExtent(selectedRange!.start, 2, selectedRow, 0)
+        }
+        else {
+            selectionApi.setBaseAndExtent(selectedRange!.start, 0, selectedRow, 2)
+        }
+    }
+
     return (
         <div className="editor-container">
+
             {
                 rows.map(row => {
                     return (
@@ -114,8 +159,11 @@ export default function BodyInput() {
                                 defaultValue={row.text}
                                 onChange={(event) => row.text = event.target.value}
                                 onKeyDown={(event) => onKeyDown(event, row)}
-                                onMouseUp={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current) }}
-                                onPaste={(event) => { event.preventDefault(); pasteFromClipboard() }}>
+                                onMouseUp={() => { focusedRowRef.current = row; focusRow(focusedRowRef.current); restoreSelectedText() }}
+                                onPaste={(event) => { event.preventDefault(); pasteFromClipboard() }}
+                                onMouseOver={(event) => handleSelection(event)}
+                                onMouseDown={(event) => startTextSelection(event.target as HTMLInputElement)}
+                                onDragStart={(event) => event.preventDefault()}>
                             </input>
                         </div>
                     )
